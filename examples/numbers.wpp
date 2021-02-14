@@ -1,5 +1,6 @@
 let nl "\n"
 let quoted(x) "\"" .. x .. "\""
+let const(x, val) eval("let " .. x .. " " .. quoted(val))
 
 #[ numbers ]
 let zero "z"
@@ -17,8 +18,10 @@ let mult(x,y) {
 
 let one succ(zero)
 let two succ(one)
-let three add(one, two)
-let six mult(two, three)
+#[ let three add(one, two) ]
+const("three", add(one, two))
+#[ let six mult(two, three) ]
+const("six", mult(two, three))
 
 zero nl
 one nl
@@ -41,3 +44,28 @@ let repeat(str, x) {
   eval(x)
 }
 repeat("Let's go!" .. nl, add(one, add(three, six)))
+
+let pred(x) {
+  let s(x) "ns(" .. x .. ")"
+  let z zero
+  const("_x", eval(x))
+  let s(x) {
+    let s(x) succ(x)
+    x
+  }
+  let ns(x) s(x)
+  eval(_x)
+}
+
+pred(six) nl
+pred(three) nl
+pred(two) nl
+pred(one) nl
+
+let subt(x,y) {
+  let s(x) pred(x)
+  let z x
+  eval(y)
+}
+
+subt(six, two)
